@@ -537,12 +537,17 @@ async function generateWordDocument(data) {
     return await Packer.toBuffer(doc);
 }
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Resume converter server running at http://localhost:${PORT}`);
-    console.log('\nInstructions:');
-    console.log('1. Make sure you have installed required packages:');
-    console.log('   npm install express multer cors docx pdf-parse mammoth node-fetch');
-    console.log('2. Place the HTML file in a "public" folder');
-    console.log('3. Access the application at http://localhost:3000');
-});
+// For Vercel deployment - export the app
+module.exports = app;
+
+// For local development - start server
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Resume converter server running at http://localhost:${PORT}`);
+        console.log('\nInstructions:');
+        console.log('1. Make sure you have installed required packages:');
+        console.log('   npm install express multer cors docx pdf-parse mammoth node-fetch');
+        console.log('2. Place the HTML file in a "public" folder');
+        console.log('3. Access the application at http://localhost:3000');
+    });
+}
