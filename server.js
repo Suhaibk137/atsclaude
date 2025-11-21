@@ -35,7 +35,8 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use(express.static('public'));
+// Don't serve static files on Vercel - only API endpoints
+// app.use(express.static('public'));
 
 // Add preflight handling
 app.options('*', cors());
@@ -47,9 +48,23 @@ const upload = multer({
     limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
 });
 
-// Serve the HTML file
+// Health check / status endpoint
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.status(200).json({ 
+        status: 'Backend is running',
+        backend: 'Resume Template Converter API',
+        version: '1.0',
+        endpoints: ['/convert', '/health'],
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Alternative health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'ok',
+        message: 'Backend is healthy'
+    });
 });
 
 // Main conversion endpoint
