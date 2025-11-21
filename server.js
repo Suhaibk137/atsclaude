@@ -11,7 +11,11 @@ const app = express();
 const PORT = 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: '*', // Allow all origins, or replace with your Hostinger domain
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.static('public'));
 
@@ -100,7 +104,7 @@ async function callChatGPTAPI(apiKey, resumeText) {
     "experience": [
         {
             "title": "Job Title",
-            "dates": "MMM YYYY – Present/MMM YYYY",
+            "dates": "MMM YYYY â€“ Present/MMM YYYY",
             "company": "Company Name, Location",
             "responsibilities": ["responsibility1", "responsibility2", "..."]
         }
@@ -193,7 +197,7 @@ async function generateWordDocument(data) {
                 levels: [{
                     level: 0,
                     format: LevelFormat.BULLET,
-                    text: "•",
+                    text: "â€¢",
                     alignment: AlignmentType.LEFT,
                     style: {
                         paragraph: {

@@ -268,17 +268,17 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎯 Resume Template Converter</h1>
+            <h1>ðŸŽ¯ Resume Template Converter</h1>
             <p>Convert any resume to Elite Professional Solutions standard template</p>
         </div>
 
         <div class="main-content">
             <div class="server-status offline" id="serverStatus">
-                ⚠️ Server Status: Checking...
+                âš ï¸ Server Status: Checking...
             </div>
 
             <div class="instructions">
-                <h3>📋 How to Use:</h3>
+                <h3>ðŸ“‹ How to Use:</h3>
                 <ol>
                     <li><strong>Start the server:</strong> Run <code>npm start</code> in terminal</li>
                     <li>Enter your ChatGPT API key (required for conversion)</li>
@@ -289,7 +289,7 @@
             </div>
 
             <div class="api-key-section">
-                <h3>🔑 ChatGPT API Key</h3>
+                <h3>ðŸ”‘ ChatGPT API Key</h3>
                 <input 
                     type="password" 
                     id="apiKey" 
@@ -303,7 +303,7 @@
             </div>
 
             <div class="upload-section" id="uploadSection">
-                <div style="font-size: 48px; margin-bottom: 20px;">📄</div>
+                <div style="font-size: 48px; margin-bottom: 20px;">ðŸ“„</div>
                 <h3 style="margin-bottom: 10px;">Upload Resume</h3>
                 <p style="color: #718096; margin-bottom: 20px;">
                     Drag & drop your resume here or click to browse
@@ -318,7 +318,7 @@
             </div>
 
             <button class="convert-btn" id="convertBtn">
-                🚀 Convert to Template
+                ðŸš€ Convert to Template
             </button>
 
             <div class="status-section" id="statusSection">
@@ -327,20 +327,23 @@
             </div>
 
             <div class="download-section" id="downloadSection">
-                <h3>✅ Conversion Complete!</h3>
+                <h3>âœ… Conversion Complete!</h3>
                 <p style="margin: 15px 0;">Your resume has been successfully converted to the template format.</p>
                 <a href="#" class="download-btn" id="downloadBtn" download>
-                    📥 Download Word Document
+                    ðŸ“¥ Download Word Document
                 </a>
             </div>
         </div>
 
         <div class="footer">
-            <p>© 2024 Elite Professional Solutions | Resume Template Converter</p>
+            <p>Â© 2024 Elite Professional Solutions | Resume Template Converter</p>
         </div>
     </div>
 
     <script>
+        // Backend URL - points to Vercel deployment
+        const BACKEND_URL = 'https://atsaclaude-2jv5.vercel.app';
+
         let selectedFile = null;
         let convertedDocument = null;
 
@@ -348,14 +351,14 @@
         async function checkServerStatus() {
             const serverStatus = document.getElementById('serverStatus');
             try {
-                const response = await fetch('http://localhost:3000/');
+                const response = await fetch(BACKEND_URL + '/');
                 if (response.ok) {
-                    serverStatus.textContent = '✅ Server Status: Online';
+                    serverStatus.textContent = 'âœ… Server Status: Online';
                     serverStatus.className = 'server-status online';
                     return true;
                 }
             } catch (error) {
-                serverStatus.textContent = '❌ Server Status: Offline - Please run "npm start" in terminal';
+                serverStatus.textContent = 'âŒ Server Status: Offline - Please run "npm start" in terminal';
                 serverStatus.className = 'server-status offline';
                 return false;
             }
@@ -431,7 +434,7 @@
             // Check if server is running
             const serverOnline = await checkServerStatus();
             if (!serverOnline) {
-                alert('Server is not running! Please run "npm start" in the terminal first.');
+                alert('Server is not responding. Please check your backend deployment.');
                 return;
             }
 
@@ -460,7 +463,7 @@
                 addStatusMessage('Uploading resume to server...', 'info');
                 addStatusMessage('Processing with ChatGPT API...', 'info');
                 
-                const response = await fetch('http://localhost:3000/convert', {
+                const response = await fetch(BACKEND_URL + '/convert', {
                     method: 'POST',
                     body: formData
                 });
