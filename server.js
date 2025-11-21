@@ -15,7 +15,9 @@ const allowedOrigins = [
     'https://eliteresumes.in',
     'https://www.eliteresumes.in',
     'http://localhost:3000',
-    'http://localhost:5000'
+    'http://localhost:5000',
+    'http://localhost',
+    'https://localhost'
 ];
 
 app.use(cors({
@@ -23,16 +25,13 @@ app.use(cors({
         // Allow requests with no origin (mobile apps, curl requests)
         if (!origin) return callback(null, true);
         
-        if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.log(`CORS blocked request from origin: ${origin}`);
-            callback(new Error('Not allowed by CORS'));
-        }
+        // Allow all origins for now - can be restricted later
+        callback(null, true);
     },
     methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-    credentials: true,
-    optionsSuccessStatus: 200
+    credentials: false,
+    optionsSuccessStatus: 200,
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
