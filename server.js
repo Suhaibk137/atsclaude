@@ -11,13 +11,35 @@ const app = express();
 const PORT = 3000;
 
 // Middleware
+const allowedOrigins = [
+    'https://eliteresumes.in',
+    'https://www.eliteresumes.in',
+    'http://localhost:3000',
+    'http://localhost:5000'
+];
+
 app.use(cors({
-    origin: '*', // Allow all origins, or replace with your Hostinger domain
-    methods: ['GET', 'POST', 'OPTIONS'],
-    credentials: true
+    origin: function(origin, callback) {
+        // Allow requests with no origin (mobile apps, curl requests)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.log(`CORS blocked request from origin: ${origin}`);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+    credentials: true,
+    optionsSuccessStatus: 200
 }));
+
 app.use(express.json());
 app.use(express.static('public'));
+
+// Add preflight handling
+app.options('*', cors());
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
