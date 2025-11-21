@@ -1,0 +1,11 @@
+.git
+.gitignore
+README.md
+node_modules
+*.log
+.DS_Store
+public/
+HOSTINGER_DEPLOYMENT.md
+DEPLOYMENT_COMPLETE_SUMMARY.md
+DEPLOYMENT_REFERENCE.md
+QUICK_FIX_STEPS.txt
