@@ -20,7 +20,7 @@
   "author": "Elite Professional Solutions",
   "license": "MIT",
   "engines": {
-    "node": "18.x"
+    "node": "22.x"
   },
   "dependencies": {
     "express": "^4.18.2",
