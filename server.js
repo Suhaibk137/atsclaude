@@ -10,36 +10,24 @@ const mammoth = require('mammoth');
 const app = express();
 const PORT = 3000;
 
-// Middleware
-const allowedOrigins = [
-    'https://eliteresumes.in',
-    'https://www.eliteresumes.in',
-    'http://localhost:3000',
-    'http://localhost:5000',
-    'http://localhost',
-    'https://localhost'
-];
-
-app.use(cors({
-    origin: function(origin, callback) {
-        // Allow requests with no origin (mobile apps, curl requests)
-        if (!origin) return callback(null, true);
-        
-        // Allow all origins for now - can be restricted later
-        callback(null, true);
-    },
-    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-    credentials: false,
-    optionsSuccessStatus: 200,
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// Middleware - CORS Configuration
+app.use((req, res, next) => {
+    // Set CORS headers explicitly
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'false');
+    
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
 
 app.use(express.json());
 // Don't serve static files on Vercel - only API endpoints
 // app.use(express.static('public'));
-
-// Add preflight handling
-app.options('*', cors());
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
