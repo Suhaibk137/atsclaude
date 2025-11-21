@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Template Converter - Elite Professional Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .upload-section {
+            background: #f7fafc;
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section.dragover {
+            background: #edf2f7;
+            border-color: #4a5568;
+        }
+
+        .upload-label {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #4a5568;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-weight: 600;
+        }
+
+        .upload-label:hover {
+            background: #2d3748;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .api-key-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+        }
+
+        .api-key-section h3 {
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .api-key-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .convert-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: none;
+        }
+
+        .convert-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .convert-btn.show {
+            display: block;
+        }
+
+        .convert-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .status-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f4f8;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .status-section.show {
+            display: block;
+        }
+
+        .status-message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .status-message.info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        .status-message.success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-message.error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .download-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #e6fffa;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .download-section.show {
+            display: block;
+        }
+
+        .download-btn {
+            padding: 12px 30px;
+            background: #38b2ac;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: #2c7a7b;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .instructions {
+            background: #fef5e7;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #f39c12;
+        }
+
+        .instructions h3 {
+            color: #d68910;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #7d6608;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f7fafc;
+            color: #4a5568;
+        }
+
+        .server-status {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .server-status.online {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .server-status.offline {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Resume Template Converter</h1>
+            <p>Convert any resume to Elite Professional Solutions standard template</p>
+        </div>
+
+        <div class="main-content">
+            <div class="server-status offline" id="serverStatus">
+                ⚠️ Server Status: Checking...
+            </div>
+
+            <div class="instructions">
+                <h3>📋 How to Use:</h3>
+                <ol>
+                    <li><strong>Start the server:</strong> Run <code>npm start</code> in terminal</li>
+                    <li>Enter your ChatGPT API key (required for conversion)</li>
+                    <li>Upload a resume in any format (PDF, DOCX, TXT)</li>
+                    <li>Click "Convert to Template" button</li>
+                    <li>Download the converted Word document</li>
+                </ol>
+            </div>
+
+            <div class="api-key-section">
+                <h3>🔑 ChatGPT API Key</h3>
+                <input 
+                    type="password" 
+                    id="apiKey" 
+                    class="api-key-input" 
+                    placeholder="Enter your ChatGPT API key (sk-...)"
+                    value=""
+                />
+                <small style="color: #718096; display: block; margin-top: 5px;">
+                    Your API key is stored locally and never sent to any server except ChatGPT API
+                </small>
+            </div>
+
+            <div class="upload-section" id="uploadSection">
+                <div style="font-size: 48px; margin-bottom: 20px;">📄</div>
+                <h3 style="margin-bottom: 10px;">Upload Resume</h3>
+                <p style="color: #718096; margin-bottom: 20px;">
+                    Drag & drop your resume here or click to browse
+                </p>
+                <label for="fileInput" class="upload-label">
+                    Choose File
+                </label>
+                <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt">
+                <div class="file-info" id="fileInfo">
+                    <strong>Selected file:</strong> <span id="fileName"></span>
+                </div>
+            </div>
+
+            <button class="convert-btn" id="convertBtn">
+                🚀 Convert to Template
+            </button>
+
+            <div class="status-section" id="statusSection">
+                <h3>Conversion Status</h3>
+                <div id="statusMessages"></div>
+            </div>
+
+            <div class="download-section" id="downloadSection">
+                <h3>✅ Conversion Complete!</h3>
+                <p style="margin: 15px 0;">Your resume has been successfully converted to the template format.</p>
+                <a href="#" class="download-btn" id="downloadBtn" download>
+                    📥 Download Word Document
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2024 Elite Professional Solutions | Resume Template Converter</p>
+        </div>
+    </div>
+
+    <script>
+        let selectedFile = null;
+        let convertedDocument = null;
+
+        // Check server status
+        async function checkServerStatus() {
+            const serverStatus = document.getElementById('serverStatus');
+            try {
+                const response = await fetch('http://localhost:3000/');
+                if (response.ok) {
+                    serverStatus.textContent = '✅ Server Status: Online';
+                    serverStatus.className = 'server-status online';
+                    return true;
+                }
+            } catch (error) {
+                serverStatus.textContent = '❌ Server Status: Offline - Please run "npm start" in terminal';
+                serverStatus.className = 'server-status offline';
+                return false;
+            }
+        }
+
+        // Check server status on load
+        checkServerStatus();
+        // Check every 5 seconds
+        setInterval(checkServerStatus, 5000);
+
+        // File upload handling
+        const fileInput = document.getElementById('fileInput');
+        const uploadSection = document.getElementById('uploadSection');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const convertBtn = document.getElementById('convertBtn');
+        const apiKeyInput = document.getElementById('apiKey');
+
+        // Load saved API key from localStorage
+        const savedApiKey = localStorage.getItem('chatgptApiKey');
+        if (savedApiKey) {
+            apiKeyInput.value = savedApiKey;
+        }
+
+        // Save API key when changed
+        apiKeyInput.addEventListener('change', () => {
+            localStorage.setItem('chatgptApiKey', apiKeyInput.value);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFileSelect(e.target.files[0]);
+        });
+
+        // Drag and drop
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.classList.add('dragover');
+        });
+
+        uploadSection.addEventListener('dragleave', () => {
+            uploadSection.classList.remove('dragover');
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.classList.remove('dragover');
+            handleFileSelect(e.dataTransfer.files[0]);
+        });
+
+        function handleFileSelect(file) {
+            if (file) {
+                selectedFile = file;
+                fileName.textContent = file.name;
+                fileInfo.classList.add('show');
+                convertBtn.classList.add('show');
+            }
+        }
+
+        // Convert button click
+        convertBtn.addEventListener('click', async () => {
+            const apiKey = apiKeyInput.value.trim();
+            
+            if (!apiKey) {
+                alert('Please enter your ChatGPT API key');
+                return;
+            }
+
+            if (!selectedFile) {
+                alert('Please select a resume file');
+                return;
+            }
+
+            // Check if server is running
+            const serverOnline = await checkServerStatus();
+            if (!serverOnline) {
+                alert('Server is not running! Please run "npm start" in the terminal first.');
+                return;
+            }
+
+            await convertResume();
+        });
+
+        async function convertResume() {
+            const statusSection = document.getElementById('statusSection');
+            const statusMessages = document.getElementById('statusMessages');
+            const downloadSection = document.getElementById('downloadSection');
+
+            // Reset sections
+            statusSection.classList.add('show');
+            downloadSection.classList.remove('show');
+            statusMessages.innerHTML = '';
+            convertBtn.disabled = true;
+
+            try {
+                // Step 1: Prepare form data
+                addStatusMessage('Preparing file for upload...', 'info');
+                const formData = new FormData();
+                formData.append('resume', selectedFile);
+                formData.append('apiKey', apiKeyInput.value);
+
+                // Step 2: Send to backend server
+                addStatusMessage('Uploading resume to server...', 'info');
+                addStatusMessage('Processing with ChatGPT API...', 'info');
+                
+                const response = await fetch('http://localhost:3000/convert', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Conversion failed');
+                }
+
+                // Step 3: Get the converted document
+                addStatusMessage('Generating Word document...', 'info');
+                const blob = await response.blob();
+
+                // Step 4: Success
+                addStatusMessage('Conversion completed successfully!', 'success');
+                setupDownload(blob);
+
+            } catch (error) {
+                console.error('Conversion error:', error);
+                addStatusMessage(`Error: ${error.message}`, 'error');
+                
+                if (error.message.includes('fetch')) {
+                    addStatusMessage('Make sure the server is running (npm start)', 'error');
+                }
+            } finally {
+                convertBtn.disabled = false;
+            }
+        }
+
+        function addStatusMessage(message, type) {
+            const statusMessages = document.getElementById('statusMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `status-message ${type}`;
+            messageDiv.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+            statusMessages.appendChild(messageDiv);
+        }
+
+        function setupDownload(blob) {
+            const downloadSection = document.getElementById('downloadSection');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            const url = URL.createObjectURL(blob);
+            const outputFileName = selectedFile.name.replace(/\.[^/.]+$/, '') + '_converted.docx';
+            
+            downloadBtn.href = url;
+            downloadBtn.download = outputFileName;
+            downloadSection.classList.add('show');
+        }
+    </script>
+</body>
+</html>
